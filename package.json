@@ -1,0 +1,25 @@
+{
+  "name": "CacheSandbox",
+  "description": "A sandbox environment for learning about caching.",
+  "author": {
+    "name": "Kelly Ripple",
+    "email": "kelly.m.ripple@gmail.com",
+    "url": "http://kellyripple.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kripple/all-of-the-caches.git"
+  },
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "express": "^4.14.0",
+    "prequest": "^1.0.0",
+    "request": "^2.74.0"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/mit-license.php"
+    }
+  ]
+}
