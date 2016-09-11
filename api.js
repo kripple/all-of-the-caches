@@ -1,12 +1,6 @@
 var prequest = require('prequest');
 
 var API = function() {
-	this.root = 'https://api.github.com';
-	this.testURLs = {
-		1: '/users/kripple/repos',
-		2: '/search/repositories?q=nyan&cat',
-		3: '/search/users?q=nyan&cat'
-	};
 	this.requestOptions = {
 		url: 'https://api.github.com/search/repositories?q=user%3Akripple+repo%3Aall-of-the-caches&ref=searchresults&type=Repositories',
 		headers: {
@@ -19,8 +13,8 @@ API.prototype.get = function(args) {
 	var cache = args.cache;
 	var params = args.params;
 	var opts = this.requestOptions;
-	
-	cache.get(opts,this.retrieve);
+	var promise = cache.get(opts,this.retrieve);
+	return promise;
 }
 
 API.prototype.retrieve = function(url) {
@@ -34,7 +28,8 @@ API.prototype.retrieve = function(url) {
 			return openIssues;
 		})
 		.catch(function(err) {
-			debugger
+			console.log('error: ' + err);
+			return 0;
 		});	
 
 }
