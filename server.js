@@ -22,16 +22,12 @@ app.get('/api-data/:id', function (req, res) {
 	var api = req.app.get('API');
 	var requestObj = {};
 	requestObj.cache = req.app.get('cache');
-	// requestObj.request = req.app.get('request');
 	requestObj.params = req.params;
-
 	api.get(requestObj)
 		.then(function(apiRes) {
-			// debugger
-			res.send(apiRes);
+			res.send(this);
 		})
 		.catch(function(err) {
-			// debugger
 			res.send('error: ' + err.toString());
 		});
 });
