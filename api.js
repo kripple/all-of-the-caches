@@ -1,11 +1,11 @@
 var prequest = require('prequest');
 
 var API = function() {
-	this.root = '';
+	this.root = 'https://api.github.com';
 	this.testURLs = {
-		1: '',
-		2: '',
-		3: ''
+		1: '/users/kripple/repos',
+		2: '/search/repositories?q=nyan&cat',
+		3: '/search/users?q=nyan&cat'
 	}
 }
 
