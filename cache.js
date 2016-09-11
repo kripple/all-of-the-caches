@@ -8,11 +8,12 @@ var Cache = function() {
 	this.size = 10;
 }
 
-Cache.prototype.get = function(key, selfLoadingFunc) {
-	if(!this.cache[key]) {
-		this.put(key, selfLoadingFunc(key));
+Cache.prototype.get = function(opts, selfLoadingFunc) {
+	var url = opts.url;
+	if(!this.cache[url]) {
+		this.put(url, selfLoadingFunc(opts));
 	}
-	return this.cache[key].getData();
+	return this.cache[url].getData();
 };
 
 Cache.prototype.put = function(key, value) {

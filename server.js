@@ -7,7 +7,10 @@ app.set('API', API);
 var Cache = require('./cache.js');
 app.set('cache', Cache);
 
-
+var bluebird = require('bluebird');
+var request = require('request');
+var prequest = bluebird.promisifyAll(request);
+app.set('request', prequest);
 
 var port = 3000;
 
@@ -19,15 +22,16 @@ app.get('/api-data/:id', function (req, res) {
 	var api = req.app.get('API');
 	var requestObj = {};
 	requestObj.cache = req.app.get('cache');
+	// requestObj.request = req.app.get('request');
 	requestObj.params = req.params;
 
 	api.get(requestObj)
 		.then(function(apiRes) {
-			debugger
+			// debugger
 			res.send(apiRes);
 		})
 		.catch(function(err) {
-			debugger
+			// debugger
 			res.send('error: ' + err.toString());
 		});
 });

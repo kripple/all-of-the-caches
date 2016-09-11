@@ -6,23 +6,34 @@ var API = function() {
 		1: '/users/kripple/repos',
 		2: '/search/repositories?q=nyan&cat',
 		3: '/search/users?q=nyan&cat'
-	}
+	};
+	this.requestOptions = {
+		url: 'https://api.github.com/search/repositories?q=user%3Akripple+repo%3Aall-of-the-caches&ref=searchresults&type=Repositories',
+		headers: {
+    	'User-Agent': 'kripple'
+  	}
+	};
 }
 
 API.prototype.get = function(args) {
 	var cache = args.cache;
 	var params = args.params;
-	var url = this.testURLs[params.id];
+	var opts = this.requestOptions;
 	
-	cache.get(url,this.retrieve);
+	cache.get(opts,this.retrieve);
 }
 
 API.prototype.retrieve = function(url) {
-	prequest(url)
-		.then(function() {
-			debugger
+	return prequest(url)
+		.then(function(res) {
+			var items = res.items; 
+			var openIssues = 0;
+			for(var i = 0; i < items.length; i++) {
+				openIssues += items[i].open_issues;
+			}
+			return openIssues;
 		})
-		.catch(function() {
+		.catch(function(err) {
 			debugger
 		});	
 
