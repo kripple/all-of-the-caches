@@ -1,6 +1,6 @@
-var CacheItem = require('./cacheItem.js');
-
-var THIRTY_MINUTES = (60*30*1000);
+var THIRTY_MINUTES 	= (60*30*1000);
+var CacheItem 			= require('./cacheItem.js');
+var util 						= require('util');
 
 var Cache = function() {
 	this.cache = {};
@@ -8,23 +8,39 @@ var Cache = function() {
 	this.size = 10;
 }
 
-Cache.prototype.get = function(opts, selfLoadingFunc) {
+Cache.prototype.get = function(opts, retrieveData) {
 	var url = opts.url;
-	if(!this.cache[url]) {
-		this.put(url, selfLoadingFunc(opts));
+	var cacheItem = this.cache[url];
+	if(cacheItem) {
+		return Promise.resolve(cacheItem.getData());
+	} else {
+		return retrieveData(opts)
+			.bind(this)
+			.then(function(data) {
+				return this.put(url,data);
+			})
+			.catch(function(err) {
+				util.error(err);
+			})
+			.bind();
 	}
-	return this.cache[url].getData();
 };
 
-Cache.prototype.put = function(key, value) {
-	// manageCacheSize(cache);
-	setTimeout(this.delete(key), this.ttl);
-	this.cache[key] = CacheItem.create(value); 
+Cache.prototype.put = function(key, promise) {
+	// manageSize(this);
+	setExpiration(key, this);
+	var newCacheItem = CacheItem.create(data);
+	this.cache[key] = newCacheItem;
+	return newCacheItem.getData();
 };
 
 Cache.prototype.delete = function(key) {
 	this.cache[key] = undefined;
 };
+
+function setExpiration(key, cache) {
+	setTimeout(cache.delete(key), cache.ttl);
+}
 
 // Cache.prototype.evictLRU = function() {
 // 	var lru = undefined;
@@ -46,7 +62,7 @@ Cache.prototype.delete = function(key) {
 	
 // };
 
-// function manageCacheSize(cache) {
+// function manageSize(cache) {
 // 	var count = Objects.keys(cache.cache).length;
 // 	if(count > cache.size) {
 // 		cache.evictLRU();

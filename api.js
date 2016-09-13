@@ -1,4 +1,6 @@
-var prequest = require('prequest');
+var Cache 		= require('./cache.js');
+var prequest 	= require('prequest');
+var util 			= require('util');
 
 var API = function() {
 	this.requestOptions = {
@@ -7,31 +9,33 @@ var API = function() {
     	'User-Agent': 'kripple'
   	}
 	};
+	this.cache = Cache;
 }
 
-API.prototype.get = function(args) {
-	var cache = args.cache;
-	var params = args.params;
-	var opts = this.requestOptions;
-	var promise = cache.get(opts,this.retrieve);
-	return promise;
+API.prototype.get = function(params) {
+	// not using params
+	return this.cache.get(this.requestOptions,this.retrieve);
 }
 
 API.prototype.retrieve = function(url) {
+	var openIssuesCount = 0;
 	return prequest(url)
 		.then(function(res) {
-			var items = res.items; 
-			var openIssues = 0;
-			for(var i = 0; i < items.length; i++) {
-				openIssues += items[i].open_issues;
-			}
-			return openIssues;
+			openIssuesCount = getOpenIssuesCount(res.items);
+			return openIssuesCount;
 		})
 		.catch(function(err) {
-			console.log('error: ' + err);
-			return 0;
+			util.error(err);
+			return openIssuesCount;
 		});	
+}
 
+function getOpenIssuesCount(items) {
+	var openIssues = 0;
+	for(var i = 0; i < items.length; i++) {
+		openIssues += items[i].open_issues;
+	}
+	return openIssues;
 }
 
 module.exports = new API();
