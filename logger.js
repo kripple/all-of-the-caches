@@ -1,23 +1,23 @@
 var winston = require('winston');
 
-
-
 function formatMessage(args) {
 	var now = new Date();
-	var timestamp = [(now.getMonth()+1),'/',now.getDate(),' ',now.getHours(),':',now.getMinutes(),':',now.getSeconds()].join('');
+	var timestamp = [
+			(now.getMonth()+1),'/',now.getDate(),' ',
+			now.getHours(),':',now.getMinutes(),':',now.getSeconds()
+		].join('');
 	var log = [args.label,' ',args.level,': ',args.message,' ',timestamp].join('');
 	return log;
 }
 
 function getLineNumber() {
-	debugger
-// 	var originalError = Error.prepareStackTrace;
-//   Error.prepareStackTrace = function(_, stack){ return stack; };
-//   var error = new Error;
-//   Error.captureStackTrace(error, arguments.callee);
-//   var stack = error.stack;
-//   Error.prepareStackTrace = originalError;
-//   return stack[1].getLineNumber();
+	var originalError = Error.prepareStackTrace;
+	Error.prepareStackTrace = function(_, stack){ return stack; };
+	var error = new Error;
+	Error.captureStackTrace(error, arguments.callee);
+	var stack = error.stack;
+	Error.prepareStackTrace = originalError;
+	return stack[1].getLineNumber();
 }
 
 function getLogger(name) {
@@ -34,8 +34,6 @@ function getLogger(name) {
     ]
   });
 };
-
-
 
 exports.getLogger 		= getLogger;
 exports.getLineNumber = getLineNumber;

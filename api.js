@@ -16,7 +16,6 @@ var API = function() {
 }
 
 API.prototype.get = function(params) {
-	// not using params
 	logger.info('API is requesting data from the cache.');
 	return this.cache.get(this.requestOptions,this.retrieve);
 }
@@ -30,7 +29,6 @@ API.prototype.retrieve = function(opts) {
 	return prequest(opts)
 		.then(function(res) {
 			logger.info('API successfully retrieved data from the internet.')
-			// logger.info('URL responded with ', res);
 
 			openIssuesCount = getOpenIssuesCount(res.items);
 			logger.info('API is responding to server with %s.', openIssuesCount.toString());
@@ -39,7 +37,6 @@ API.prototype.retrieve = function(opts) {
 		})
 		.catch(function(err) {
 			logger.error('API was unable to retrieve data.');
-			// throw new Error('API was unable to retrieve data.');
 		});	
 }
 
@@ -52,3 +49,4 @@ function getOpenIssuesCount(items) {
 }
 
 module.exports = new API();
+

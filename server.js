@@ -31,7 +31,6 @@ app.get('/api-data/:id', function (req, res) {
 		})
 		.catch(function(err) {
 			logger.error('Server was unable to retrieve API data.');
-			// throw new Error();
 		});
 });
 

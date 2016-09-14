@@ -1,25 +1,13 @@
 var THIRTY_MINUTES 	= (60*30*1000);
+var TWO_MINUTES			= (60*2*1000);
 var CacheItem 			= require('./cacheItem.js');
-var winston 				= require('winston');
+var Logger 					= require('./logger.js');
+var logger 					= Logger.getLogger('cache');
 
-// var logger = new (winston.Logger)({
-//     transports: [
-//       new (winston.transports.Console)({
-//       	timestamp: true,
-//     		exitOnError: true,
-//     		handleExceptions: true,
-//     		humanReadableUnhandledException: true,
-//     		colorize: true
-//     	})
-//     ]
-//   });
-var Logger = require('./logger.js');
-var logger = Logger.getLogger('cache');
-// var getLine = Logger.getLineNumber();
 
 var Cache = function() {
 	this.cache = {};
-	this.ttl = THIRTY_MINUTES;
+	this.ttl = TWO_MINUTES;
 	this.size = 10;
 }
 
@@ -45,7 +33,6 @@ Cache.prototype.get = function(opts, retrieveData) {
 			})
 			.catch(function(err) {
 				logger.error('API cache was unable to retrieve data.');
-				// throw new Error('API cache was unable to retrieve data.');
 			})
 			.bind();
 	}
@@ -61,7 +48,7 @@ Cache.prototype.put = function(key, data) {
 
 Cache.prototype.delete = function(key) {
 	logger.info('Cache is deleting an item.');
-	logger.info('Cache is deleting %s', this.cache[key].toString());
+	logger.info('Cache is deleting ', {key:key,data:this.cache[key]});
 	this.cache[key] = undefined;
 };
 
@@ -97,8 +84,6 @@ function setExpiration(key, cache) {
 // 		// cache.evictLFU();
 // 	}
 // };
-
-
 
 module.exports = new Cache();
 
