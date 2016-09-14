@@ -14,7 +14,8 @@
     "bluebird": "^3.4.6",
     "express": "^4.14.0",
     "prequest": "^1.0.0",
-    "request": "^2.74.0"
+    "request": "^2.74.0",
+    "winston": "^2.2.0"
   },
   "licenses": [
     {

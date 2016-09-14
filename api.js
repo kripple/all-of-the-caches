@@ -1,6 +1,9 @@
 var Cache 		= require('./cache.js');
 var prequest 	= require('prequest');
-var util 			= require('util');
+var winston 	= require('winston');
+
+var Logger = require('./logger.js');
+var logger = Logger.getLogger('api');
 
 var API = function() {
 	this.requestOptions = {
@@ -14,19 +17,29 @@ var API = function() {
 
 API.prototype.get = function(params) {
 	// not using params
+	logger.info('API is requesting data from the cache.');
 	return this.cache.get(this.requestOptions,this.retrieve);
 }
 
-API.prototype.retrieve = function(url) {
+API.prototype.retrieve = function(opts) {
 	var openIssuesCount = 0;
-	return prequest(url)
+
+	logger.info('API is making a GET request.');
+	logger.info('API is requesting data at %s.', opts.url);
+
+	return prequest(opts)
 		.then(function(res) {
+			logger.info('API successfully retrieved data from the internet.')
+			// logger.info('URL responded with ', res);
+
 			openIssuesCount = getOpenIssuesCount(res.items);
+			logger.info('API is responding to server with %s.', openIssuesCount.toString());
+	
 			return openIssuesCount;
 		})
 		.catch(function(err) {
-			util.error(err);
-			return openIssuesCount;
+			logger.error('API was unable to retrieve data.');
+			// throw new Error('API was unable to retrieve data.');
 		});	
 }
 
