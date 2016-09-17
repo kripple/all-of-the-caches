@@ -20,6 +20,7 @@ Cache.prototype.get = function(opts, retrieveData) {
 	if(cacheItem) {
 		logger.info('Requested item is contained in cache, cache is returning cached item.');
 		logger.info('Cache is returning %s', cacheItem.getData());
+		// FIXME reset expiration timeout
 
 		return Promise.resolve(cacheItem.getData());
 	} else {
@@ -57,33 +58,28 @@ function setExpiration(key, cache) {
 	setTimeout(function() { cache.delete(key); }, cache.ttl);
 }
 
-// Cache.prototype.evictLRU = function() {
-// 	var lru = undefined;
-// 	var lruKey = undefined;
+Cache.prototype.evictLFU = function() {
+	// var lru = undefined;
+	// var lruKey = undefined;
 
-// 	foreach(this, function(cacheItem, key) {
-// 		if(lru === undefined) {
-// 			lru = cacheItem;
-// 			lruKey = key;
-// 		} else if(lru.lastUsed > cacheItem.lastUsed) {
-// 			lru = cacheItem;
-// 			lruKey = key;
-// 		}
-// 	});
-// 	this[lruKey] = undefined;
-// };
+	// foreach(this, function(cacheItem, key) {
+	// 	if(lru === undefined) {
+	// 		lru = cacheItem;
+	// 		lruKey = key;
+	// 	} else if(lru.lastUsed > cacheItem.lastUsed) {
+	// 		lru = cacheItem;
+	// 		lruKey = key;
+	// 	}
+	// });
+	// this[lruKey] = undefined;
+};
 
-// Cache.prototype.evictLFU = function() {
-	
-// };
-
-// function manageSize(cache) {
-// 	var count = Objects.keys(cache.cache).length;
-// 	if(count > cache.size) {
-// 		cache.evictLRU();
-// 		// cache.evictLFU();
-// 	}
-// };
+function manageSize(cache) {
+	var count = Objects.keys(cache.cache).length;
+	if(count > cache.size) {
+		cache.evictLFU();
+	}
+};
 
 module.exports = new Cache();
 

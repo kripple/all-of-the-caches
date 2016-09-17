@@ -8,12 +8,6 @@ CacheItem.prototype.getData = function() {
 	return this.data;
 }
 
-// CacheItem.prototype.setData = function(data) {
-// 	this.lastUsed = getTimestamp();
-// 	this.data = data;
-// 	return this.data;
-// }
-
 function create(item) {
 	return new CacheItem(item);
 }
