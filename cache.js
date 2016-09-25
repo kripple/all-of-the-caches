@@ -11,7 +11,7 @@ var Cache = function() {
 	this.size = 10;
 }
 
-Cache.prototype.get = function(opts, retrieveData) {
+Cache.prototype.get = function(opts,retrieveData) {
 	var url = opts.url;
 	var cacheItem = this.cache[url];
 	

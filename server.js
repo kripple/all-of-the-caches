@@ -27,10 +27,11 @@ app.get('/api-data/:id', function (req, res) {
 		.then(function(apiRes) {
 			logger.info('API successfully returned data to the server.');
 			logger.debug('API responded with: %s', JSON.stringify(apiRes));
-			res.send(JSON.stringify(apiRes));
+			res.json(apiRes);
 		})
 		.catch(function(err) {
 			logger.error('Server was unable to retrieve API data.');
+			res.json(err);
 		});
 });
 
